@@ -1,0 +1,11 @@
+{
+  "app": {
+    "port": "PORT_NUMBER",
+    "mongoConfig":{
+      "host": "MONGO_HOST",
+      "port": "MONGO_PORT",
+      "timeout": "MONGO_TIMEOUT",
+      "dbName": "DB_NAME"
+    }
+  }
+}

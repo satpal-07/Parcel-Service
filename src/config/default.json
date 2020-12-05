@@ -1,0 +1,12 @@
+{
+  "app": {
+    "port": 8000,
+    "serviceName": "Parcel Service",
+    "mongoConfig": {
+      "host": "localhost",
+      "port": 27017,
+      "timeout": 5000,
+      "dbName": "ParcelService"
+    }
+  }
+}
