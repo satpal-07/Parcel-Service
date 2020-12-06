@@ -1,4 +1,3 @@
-//'use strict';
 const mongoose = require('mongoose');
 const mongoConfig = require('config').app.mongoConfig;
 const LoadingServiceDb = mongoose.connection.useDb(mongoConfig.dbName);
@@ -20,7 +19,9 @@ const truckSchema = new mongoose.Schema({
   },
 });
 
-
+/**
+ * Sanitise truck data function
+ */
 truckSchema.methods.toJSON = function () {
   let obj = this.toObject();
   delete obj.__v;

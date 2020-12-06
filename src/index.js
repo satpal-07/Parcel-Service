@@ -1,4 +1,3 @@
-'use strict'
 const appConfig = require('config').app;
 const dbConnection = require('./db-handler/db-connect.js');
 const app = require('./app');

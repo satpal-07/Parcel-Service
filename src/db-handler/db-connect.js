@@ -1,12 +1,16 @@
-//'use strict';
 const mongoose = require('mongoose');
-const app = require('../app');
 const mongoConfig = require('config').app.mongoConfig;
 
+/**
+ * Sets up the DB - connects the server to DB and other essential DB set up operations
+ */
 const setUp = async () => {
+  // add the required mongo options
   const options = { useNewUrlParser: true, useUnifiedTopology: true };
+  // create the mongo db uri
   let dbURI = `mongodb://${mongoConfig.host}:${mongoConfig.port}`;
 
+  // connect to mongo DB
   mongoose.connect(dbURI, options, function (err) {
     if (err) {
       console.error(
@@ -17,32 +21,39 @@ const setUp = async () => {
     }
   });
 
+  // on connecting event call back
   mongoose.connection.on('connecting', () => {
     console.log('Connecting to MongoDB...');
   });
 
+  // on error event call back
   mongoose.connection.on('error', (err) => {
     console.error(`MongoDB connection error: ${err}`);
     mongoose.disconnect();
   });
 
+  // on connected event call back
   mongoose.connection.on('connected', () => {
     console.log('Connected to MongoDB!', dbURI);
   });
 
+  // on open event call back
   mongoose.connection.once('open', () => {
     console.log('MongoDB connection opened!');
   });
 
+  // on reconnected event call back
   mongoose.connection.on('reconnected', () => {
     console.log('MongoDB reconnected!');
   });
 
+  // on disconnect event call back
   mongoose.connection.on('disconnected', () => {
     console.error(`MongoDB disconnected!`);
     setTimeout(() => connect(), mongoConfig.timeout);
   });
 
+  // create our own index
   mongoose.set('useCreateIndex', true)
 
   // If the Node process ends, close the Mongoose connection

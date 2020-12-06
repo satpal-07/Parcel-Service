@@ -1,36 +1,62 @@
 const { v4: uuidv4 } = require('uuid');
 
-const randomWeight = (weight = 0, unit='kg') => {
-  return { unit,
-  quantity: weight || Math.ceil(Math.random()*10) }
-}
+/**
+ * Creates weight object with given weight and unit
+ *
+ * @param {number} [weight=0] - weight quantity
+ * @param {string} [unit='kg'] - weight unit
+ * @returns {Object} - weight object with quantity and unit fields
+ */
+const createWeight = (weight = 0, unit = 'kg') => {
+  return { unit, quantity: weight || Math.ceil(Math.random() * 10) };
+};
 
-const getTruckWeight = (parcels) => {
+/**
+ * Calculates the truck weight
+ *
+ * @param {Object} truck
+ * @returns {Number} - weight of the truck
+ */
+const sumParcelWeight = (parcels) => {
+  if (!parcels || !parcels.length) return 0;
   let truckWeight = 0;
-  parcels.forEach(element => {
+  parcels.forEach((element) => {
     truckWeight += element.weight.quantity;
   });
   return truckWeight;
-}
+};
 
-const generateParcels = ({count = 10, weight = 0}) => {
+/**
+ * Generates parcels with given count and weight
+ *
+ * @param {Object} {count = 10, weight = 0} - number of parcels and its weight. if weight is 0 then random number is used for each parcel weight
+ * @returns {Array} - list of generated parcels
+ */
+const generateParcels = ({ count = 10, weight = 0 }) => {
   const parcels = [];
   for (let i = 0; i < count; i++) {
     parcels.push({
       id: uuidv4(),
-      weight: randomWeight(weight),
+      weight: createWeight(weight),
     });
   }
   return parcels;
 };
 
-const formatWeight = (weight, unit = 'kg') => {
-  return {quantity: weight, unit};
-}
+/**
+ * Formats the weight into weight object
+ *
+ * @param {Number} quantity - weight quantity
+ * @param {string} [unit='kg'] - weight unit
+ * @returns {Object} - weight object
+ */
+const formatWeight = (quantity, unit = 'kg') => {
+  return { quantity, unit };
+};
 
 module.exports = {
-  randomWeight,
-  getTruckWeight,
+  createWeight,
+  sumParcelWeight,
   generateParcels,
-  formatWeight
-}
+  formatWeight,
+};

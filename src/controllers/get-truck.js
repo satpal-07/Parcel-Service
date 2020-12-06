@@ -1,22 +1,41 @@
-const { findTruck } = require('../db-handler/db-query');
 const Joi = require('joi');
+const { findTruckById } = require('../db-handler/db-query');
+
+/**
+ * Endpoint name
+ */
 const endpointName = '/getTruck';
 
+/**
+ * Endpoint validation schema
+ */
 const endpointSchema = Joi.object({
   truckId: Joi.string().guid().required(),
 });
 
+/**
+ * Endpoint to get the truck details - gets the truck associated with the given id
+ *
+ * @param {Object} request - route request object
+ * @param {Object} response - route response object
+ */
 const endpoint = async (request, response) => {
   try {
+
+    // get query param
     const query =request.query.truckId;
-    const truck = await findTruck(query).catch((err) => {
-      console.error('Error in getting truck list: ' + err.message);
-      response.status(503).send('Service Unavailable');
+
+    // get the truck
+    const truck = await findTruckById(query).catch((err) => {
+      console.error('Error in getting truck from the DB');
+      throw new Error(err.message);
     });
+
+    // return the truck details
     response.status(200).json(truck);
   } catch (error) {
-    console.error('Error in getting truck list: ' + error.message);
-    response.status(500).send('Server error!');
+    console.error('Error in getting truck: ' + error.message);
+    response.status(500).send('Unable to get the truck details due to server error!');
   }
 };
 

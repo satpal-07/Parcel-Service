@@ -1,30 +1,21 @@
-//'use strict';
 const express = require('express');
-// const { getTruck, getTruckEndpoint } = require('./controllers/get-truck.js');
-// const {
-//   createTruck,
-//   createTruckEndpoint,
-// } = require('./controllers/create-truck.js');
-// const { loadTruck, loadTruckEndpoint } = require('./controllers/load-truck');
-// const {
-//   unloadTruck,
-//   unloadTruckEndpoint,
-// } = require('./controllers/unload-truck');
-// const {
-//   parcelNumber,
-//   parcelNumberEndpoint,
-// } = require('./controllers/get-parcels-number');
-const router = require('./routes');
-const allowedMethods = ['GET', 'POST', 'DELETE'];
-const app = express();
 const compression = require('compression');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const app = express();
+const router = require('./routes');
+
+/**
+ * Allowed methods
+ */
+const allowedMethods = ['GET', 'POST', 'DELETE'];
+
+// add compression middleware to compress the response bodies
 app.use(compression());
+// add helmet to secure the express server
 app.use(helmet());
+// add json request parser
 app.use(express.json());
-
-
 
 // middleware to block unused methods
 app.use((req, res, next) => {
@@ -35,12 +26,13 @@ app.use((req, res, next) => {
   }
 });
 
+// logger middleware to log all the incoming requests and responses
 app.use(
   morgan('combined', {
     format: 'default',
     stream: {
       write: function (str) {
-        console.debug(str);
+        console.info(str);
       }
     },
     skip: function (req, res) {

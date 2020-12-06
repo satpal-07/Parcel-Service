@@ -1,8 +1,9 @@
-//'use strict';
 const mongoose = require('mongoose');
 const mongoConfig = require('config').app.mongoConfig;
 const LoadingServiceDb = mongoose.connection.useDb(mongoConfig.dbName);
-// truck schema
+
+
+// parcel schema
 const parcelSchema = new mongoose.Schema({
   id: {
     type: String,
@@ -19,6 +20,9 @@ const parcelSchema = new mongoose.Schema({
   },
 });
 
+/**
+ * Sanitise truck data function
+ */
 parcelSchema.methods.toJSON = function () {
   let obj = this.toObject();
   delete obj.__v;

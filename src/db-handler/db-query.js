@@ -1,77 +1,128 @@
-//'use strict';
-
 const truckModel = require('./model/truck');
 const parcelModel = require('./model/parcel');
 
+/**
+ * Creates the truck
+ *
+ * @param {Object} truckData - truck data
+ * @returns {Object} newly created truck object
+ */
 const createTruck = async (truckData) => {
   return await new truckModel(truckData)
     .save()
     .catch((err) => console.error(err.message));
 };
 
-const findTruck = async (id) => {
+/**
+ * Finds one truck associated with given id
+ *
+ * @param {uuid} id - truck id
+ * @returns {Object} truck object
+ */
+const findTruckByIdById = async (id) => {
   const query = { id };
   return await truckModel
     .findOne(query)
     .catch((err) => console.error(err.message));
 };
 
-const findAllTruck = async () => {
-  return await truckModel.find()
-    .catch((err) => console.error(err.message));
+/**
+ * Finds all the trucks
+ *
+ * @returns {Array} truck list
+ */
+const findAllTrucks = async () => {
+  return await truckModel.find().catch((err) => console.error(err.message));
 };
 
-const updateTruck = async (id, updateData) => {
+/**
+ * Updates the truck associated with the given id
+ *
+ * @param {uuid} id
+ * @param {Object} updateData
+ * @returns
+ */
+const updateTruckByIdById = async (id, updateData) => {
   const query = { id };
   return await truckModel
-    .findOneAndUpdate(query, updateData,
-      {new: true, runValidators: true})
+    .findOneAndUpdate(query, updateData, { new: true, runValidators: true })
     .catch((err) => console.error(err.message));
 };
 
-const findAndRemoveTruck = async (id) => {
+
+/**
+ * Removes truck by id
+ *
+ * @param {uuid} truckId - truck id
+ * @returns {Object} - removed parcel
+ */
+const findAndRemoveTruckById = async (id) => {
   const query = { id };
   return await truckModel
     .findOneAndDelete(query)
     .catch((err) => console.error(err.message));
 };
 
-const createParcel = async (truckData) => {
-  return await new parcelModel(truckData)
+/**
+ * Creates Parcel
+ *
+ * @param {*} parcelData - parcel data
+ * @returns {Object} newly created parcel object
+ */
+const createParcel = async (parcelData) => {
+  return await new parcelModel(parcelData)
     .save()
     .catch((err) => console.error(err.message));
 };
 
-
-const findParcel = async (id) => {
-  const query = { id };
+/**
+ * Finds parcel(s) associated with the truck id
+ *
+ * @param {uuid} truckId - truck id
+ * @returns {Array} - Parcel list
+ */
+const findParcelsByTruckId = async (truckId) => {
+  const query = { truckId };
   return await parcelModel
-    .findOne(query)
+    .find(query)
     .catch((err) => console.error(err.message));
 };
 
-const updateParcel = async (id, updateData) => {
+/**
+ * Updates parcel by id
+ *
+ * @param {uuid} id
+ * @param {Object} updateData
+ * @returns {Object} - updated parcel
+ */
+const updateParcelById = async (id, updateData) => {
   const query = { id };
   return await parcelModel
     .findOne(query, updateData)
     .catch((err) => console.error(err.message));
 };
 
-const findAndRemoveParcel = async (id) => {
-  const query = { id };
+/**
+ * Removes parcel by truck id
+ *
+ * @param {uuid} truckId - truck id
+ * @returns {Object} - removed parcel
+ */
+const findAndRemoveParcelById = async (truckId) => {
+  const query = { truckId };
   return await parcelModel
     .findOneAndDelete(query)
     .catch((err) => console.error(err.message));
 };
 
 module.exports = {
-  findTruck,
+  findTruckByIdById,
   createTruck,
-  updateTruck,
-  findAndRemoveTruck,
-  findParcel,
+  updateTruckByIdById,
+  findAndRemoveTruckById,
+  findParcelsByTruckId,
   createParcel,
-  updateParcel,
-  findAndRemoveParcel,
-  findAllTruck
+  updateParcelById,
+  findAndRemoveParcelById,
+  findAllTrucks,
 };
