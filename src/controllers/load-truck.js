@@ -24,7 +24,6 @@ const endpointSchema = Joi.object({
  */
 const endpoint = async (request, response) => {
   try {
-
     // get body params
     const query = request.body.truckId;
     const parcelCount = request.body.parcelCount;
@@ -48,6 +47,10 @@ const endpoint = async (request, response) => {
       console.error('Error in updating truck in the DB');
       throw new Error(err.message);
     });
+
+    // return 404 if no truck is found
+    if (!truck)
+      return response.status(404).send('No truck found associated with the truck id');
 
     // return the updated truck details
     response.status(200).json(truck);

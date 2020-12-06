@@ -1,16 +1,13 @@
 // jest.config.js
 module.exports = {
   verbose: true,
+  // setupTestFrameworkScriptFile: '/__tests__/setup.js',
   collectCoverage: true,
   collectCoverageFrom: [
-    '**/*.{js,jsx}'
+    'controllers/*.{js,jsx}',
+    'app.{js,jsx}',
+    'routes.{js,jsx}',
   ],
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/__tests__/helpers/',
-    '/__tests__/config-unit-tests/'
-  ],
-  globalSetup: './__tests__/config-unit-tests/setup.js',
-  globalTeardown: './__tests__/config-unit-tests/teardown.js',
-  testEnvironment: './__tests__/config-unit-tests/mongo-environment.js'
+  testPathIgnorePatterns: ['/node_modules/'],
+  testEnvironment: 'node',
 };

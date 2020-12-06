@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const mongoConfig = require('config').app.mongoConfig;
-const LoadingServiceDb = mongoose.connection.useDb(mongoConfig.dbName);
+const ParcelServiceDb = mongoose.connection.useDb(mongoConfig.dbName);
 
 // truck schema
 const truckSchema = new mongoose.Schema({
@@ -29,4 +29,4 @@ truckSchema.methods.toJSON = function () {
   return obj;
 };
 
-module.exports = LoadingServiceDb.model('trucks', truckSchema);
+module.exports = ParcelServiceDb.model('trucks', truckSchema);

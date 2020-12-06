@@ -1,2 +1,5 @@
 src/node_modules/
 .vscode/
+src/coverage/
+.DS_STORE
+Requirement.txt

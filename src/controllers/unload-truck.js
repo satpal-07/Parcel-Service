@@ -33,7 +33,7 @@ const endpoint = async (request, response) => {
 
     // return 404 if no truck is found
     if (!truck)
-      response.status(404).send('No truck found associated with the truck id');
+      return response.status(404).send('No truck found associated with the truck id');
 
     // extract the parcels so it can be returned to calling service
     const responseMessage = {

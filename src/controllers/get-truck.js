@@ -21,7 +21,6 @@ const endpointSchema = Joi.object({
  */
 const endpoint = async (request, response) => {
   try {
-
     // get query param
     const query =request.query.truckId;
 

@@ -50,7 +50,7 @@ const setUp = async () => {
   // on disconnect event call back
   mongoose.connection.on('disconnected', () => {
     console.error(`MongoDB disconnected!`);
-    setTimeout(() => connect(), mongoConfig.timeout);
+    setTimeout(() => setUp(), mongoConfig.timeout);
   });
 
   // create our own index

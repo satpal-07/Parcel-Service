@@ -19,7 +19,7 @@ const createTruck = async (truckData) => {
  * @param {uuid} id - truck id
  * @returns {Object} truck object
  */
-const findTruckByIdById = async (id) => {
+const findTruckById = async (id) => {
   const query = { id };
   return await truckModel
     .findOne(query)
@@ -42,7 +42,7 @@ const findAllTrucks = async () => {
  * @param {Object} updateData
  * @returns
  */
-const updateTruckByIdById = async (id, updateData) => {
+const updateTruckById = async (id, updateData) => {
   const query = { id };
   return await truckModel
     .findOneAndUpdate(query, updateData, { new: true, runValidators: true })
@@ -116,9 +116,9 @@ const findAndRemoveParcelById = async (truckId) => {
 };
 
 module.exports = {
-  findTruckByIdById,
+  findTruckById,
   createTruck,
-  updateTruckByIdById,
+  updateTruckById,
   findAndRemoveTruckById,
   findParcelsByTruckId,
   createParcel,

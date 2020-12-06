@@ -28,7 +28,7 @@ const endpointSchema = Joi.object({
 const endpoint = async (request, response) => {
   try {
     // get or create the required params for the generating the truck
-    const id = request.body.id || uuidv4();
+    const id = request.body.truckId || uuidv4();
     const parcelCount = request.body.parcelCount;
     const parcelWeight = request.body.parcelWeight;
 

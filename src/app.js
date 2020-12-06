@@ -8,7 +8,7 @@ const router = require('./routes');
 /**
  * Allowed methods
  */
-const allowedMethods = ['GET', 'POST', 'DELETE'];
+const allowedMethods = ['GET', 'POST'];
 
 // add compression middleware to compress the response bodies
 app.use(compression());

@@ -4,7 +4,7 @@ const { findTruckById } = require('../db-handler/db-query');
 /**
  * Endpoint name
  */
-const endpointName = '/getParcelNumber';
+const endpointName = '/getParcelCount';
 
 /**
  * Endpoint validation schema
