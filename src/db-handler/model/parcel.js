@@ -17,7 +17,7 @@ const parcelSchema = new mongoose.Schema({
   truckId: {
     type: String,
     required: false,
-  },
+  }
 });
 
 /**

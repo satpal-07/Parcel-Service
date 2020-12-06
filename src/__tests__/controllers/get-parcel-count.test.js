@@ -20,13 +20,13 @@ describe('Get truck parcel count controller tests', () => {
     expect(response.statusCode).toBe(400);
   });
 
-  it('should return 200 when truck is found', async () => {
+  it('should return 200 and truck weight', async () => {
     dbQuery.findTruckById.mockReturnValue(Promise.resolve(truck));
     const response = await request.get(
       '/getParcelCount?truckId=5c37395b-fe9b-40a8-b879-b3f6814a30f4'
     );
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({ parcelCount: truck.parcels.length });
+    expect(response.body).toEqual({ parcelCount: truck.parcelCount });
   });
 
   it('should return 500 when Db throws error', async () => {

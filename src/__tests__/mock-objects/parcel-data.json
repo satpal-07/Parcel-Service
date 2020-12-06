@@ -1,0 +1,74 @@
+{
+  "parcelList": [
+    {
+      "id": "2eb5d18b-d05c-4120-a721-1b8efc4ff684",
+      "weight": {
+        "unit": "kg",
+        "quantity": 1
+      }
+    },
+    {
+      "id": "1c66eec0-68a8-42be-98cc-90b9030be0c5",
+      "weight": {
+        "unit": "kg",
+        "quantity": 5
+      }
+    },
+    {
+      "id": "caf4f090-559f-457e-8e5f-7ce4f2cc3233",
+      "weight": {
+        "unit": "kg",
+        "quantity": 4
+      }
+    },
+    {
+      "id": "2da30370-5867-4215-a94f-70b55131bd42",
+      "weight": {
+        "unit": "kg",
+        "quantity": 7
+      }
+    },
+    {
+      "id": "e8e0ed62-3777-4b45-9237-385cc9b8e978",
+      "weight": {
+        "unit": "kg",
+        "quantity": 9
+      }
+    },
+    {
+      "id": "126345d8-11f4-4025-910a-5ff0a9b50586",
+      "weight": {
+        "unit": "kg",
+        "quantity": 10
+      }
+    },
+    {
+      "id": "d7ada1db-1798-453d-9544-6cf9a81a2c51",
+      "weight": {
+        "unit": "kg",
+        "quantity": 3
+      }
+    },
+    {
+      "id": "93a7f461-b3fe-4600-8616-9ff831a9db7c",
+      "weight": {
+        "unit": "kg",
+        "quantity": 4
+      }
+    },
+    {
+      "id": "1d3903f4-97f8-4f1f-8848-c3af1b19517e",
+      "weight": {
+        "unit": "kg",
+        "quantity": 5
+      }
+    },
+    {
+      "id": "5f0c070f-c319-4dce-8821-094e9dfda352",
+      "weight": {
+        "unit": "kg",
+        "quantity": 9
+      }
+    }
+  ]
+}

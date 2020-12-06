@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const dbQuery = require('../db-handler/db-query');
 
 /**
  * Creates weight object with given weight and unit
@@ -32,13 +33,19 @@ const sumParcelWeight = (parcels) => {
  * @param {Object} {count = 10, weight = 0} - number of parcels and its weight. if weight is 0 then random number is used for each parcel weight
  * @returns {Array} - list of generated parcels
  */
-const generateParcels = ({ count = 10, weight = 0 }) => {
+const generateParcels = ({ count = 10, weight = 0, truckId = '' }) => {
   const parcels = [];
+  
   for (let i = 0; i < count; i++) {
+    // parcels.push({
+    //   id: uuidv4(),
+    //   weight: createWeight(weight),
+    // });
     parcels.push({
-      id: uuidv4(),
-      weight: createWeight(weight),
-    });
+        id: uuidv4(),
+        weight: createWeight(weight),
+        truckId
+      })
   }
   return parcels;
 };
@@ -50,8 +57,8 @@ const generateParcels = ({ count = 10, weight = 0 }) => {
  * @param {string} [unit='kg'] - weight unit
  * @returns {Object} - weight object
  */
-const formatWeight = (quantity, unit = 'kg') => {
-  return { quantity, unit };
+const formatWeight = ({quantity, unit = 'kg', currentWeight = {quantity: 0}}) => {
+  return { quantity: quantity + currentWeight.quantity, unit };
 };
 
 module.exports = {

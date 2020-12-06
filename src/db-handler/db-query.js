@@ -49,7 +49,6 @@ const updateTruckById = async (id, updateData) => {
     .catch((err) => console.error(err.message));
 };
 
-
 /**
  * Removes truck by id
  *
@@ -70,8 +69,18 @@ const findAndRemoveTruckById = async (id) => {
  * @returns {Object} newly created parcel object
  */
 const createParcel = async (parcelData) => {
-  return await new parcelModel(parcelData)
-    .save()
+  return new parcelModel(parcelData);
+};
+
+/**
+ * Saves parcel list
+ *
+ * @param {*} parcelList - parcel list
+ * @returns {Object} newly created parcel list
+ */
+const insertManyParcels = async (parcelList) => {
+  return await parcelModel
+    .insertMany(parcelList)
     .catch((err) => console.error(err.message));
 };
 
@@ -105,13 +114,26 @@ const updateParcelById = async (id, updateData) => {
 /**
  * Removes parcel by truck id
  *
+ * @param {uuid} id - truck id
+ * @returns {Object} - removed parcel
+ */
+const findAndRemoveParcelById = async (id) => {
+  const query = { id };
+  return await parcelModel
+    .findOneAndDelete(query)
+    .catch((err) => console.error(err.message));
+};
+
+/**
+ * Removes parcel by truck id
+ *
  * @param {uuid} truckId - truck id
  * @returns {Object} - removed parcel
  */
-const findAndRemoveParcelById = async (truckId) => {
+const findAndRemoveParcelsByTruckId = async (truckId) => {
   const query = { truckId };
   return await parcelModel
-    .findOneAndDelete(query)
+    .deleteMany(query)
     .catch((err) => console.error(err.message));
 };
 
@@ -125,4 +147,6 @@ module.exports = {
   updateParcelById,
   findAndRemoveParcelById,
   findAllTrucks,
+  findAndRemoveParcelsByTruckId,
+  insertManyParcels,
 };

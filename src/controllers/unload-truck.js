@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { sumParcelWeight, formatWeight } = require('./utils');
-const { updateTruckById, findTruckById } = require('../db-handler/db-query');
+const { updateTruckById, findTruckById, findParcelsByTruckId, findAndRemoveParcelsByTruckId } = require('../db-handler/db-query');
 
 /**
  * Endpoint name
@@ -23,10 +23,10 @@ const endpointSchema = Joi.object({
 const endpoint = async (request, response) => {
   try {
     // get body params
-    const query = request.body.truckId;
+    const truckId = request.body.truckId;
 
     // get the truck
-    const truck = await findTruckById(query).catch((err) => {
+    const truck = await findTruckById(truckId).catch((err) => {
       console.error('Error in getting truck from the DB');
       throw new Error(err.message);
     });
@@ -35,24 +35,37 @@ const endpoint = async (request, response) => {
     if (!truck)
       return response.status(404).send('No truck found associated with the truck id');
 
+    const parcels = await findParcelsByTruckId(truckId).catch((err) => {
+      console.error('Error in getting parcels from the DB');
+      throw new Error(err.message);
+    });
+
+    // return 404 if no parcels is found
+    if (!parcels || parcels.length === 0)
+      return response.status(404).send('No parcels found associated with the truck id');
+
+
     // extract the parcels so it can be returned to calling service
     const responseMessage = {
       message: 'unloaded following parcels',
-      parcels: truck.parcels,
+      parcels: parcels,
+      parcelCount: parcels.length
     };
-
-    // create empty parcel list
-    const parcels = [];
 
     // update query
     const update = {
-      parcels,
+      parcelCount: truck.parcelCount - parcels.length,
       // calculate the new truck weight
-      weight: formatWeight(sumParcelWeight(parcels)),
+      weight: formatWeight({quantity: sumParcelWeight([])}),
     };
 
+    await findAndRemoveParcelsByTruckId(truckId).catch((err) => {
+      console.error('Error deleting parcels from the DB');
+      throw new Error(err.message);
+    });
+
     // update the truck
-    await updateTruckById(query, update).catch((err) => {
+    await updateTruckById(truckId, update).catch((err) => {
       console.error('Error in updating truck');
       throw new Error(err.message);
     });

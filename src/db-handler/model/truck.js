@@ -13,8 +13,8 @@ const truckSchema = new mongoose.Schema({
     type: Object,
     required: true
   },
-  parcels: {
-    type: Array,
+  parcelCount: {
+    type: Number,
     required: true
   },
 });

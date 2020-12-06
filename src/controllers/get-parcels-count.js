@@ -31,8 +31,12 @@ const endpoint = async (request, response) => {
       throw new Error(err.message);
     });
 
+    // return 404 if no truck is found
+    if (!truck)
+      return response.status(404).send('No truck found associated with the truck id');
+
     // Use the parcel length as parcel count
-    const responseMessage = { parcelCount: truck.parcels.length};
+    const responseMessage = { parcelCount: truck.parcelCount};
 
     // return the parcel count
     response.status(200).json(responseMessage);

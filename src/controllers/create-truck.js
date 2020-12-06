@@ -2,7 +2,7 @@ const Joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 const { sumParcelWeight, generateParcels, formatWeight } = require('./utils');
 const { createTruck } = require('../db-handler/db-query');
-
+const dbQuery = require('../db-handler/db-query');
 
 /**
  * Endpoint name
@@ -35,14 +35,26 @@ const endpoint = async (request, response) => {
     // generate parcels - if parcel count is undefined then default value will be used. if parcel weight is undefined then random weight will be used for each parcel
     const parcels =
       request.body.parcelList ||
-      generateParcels({ count: parcelCount, weight: parcelWeight });
-    
+      generateParcels({
+        count: parcelCount,
+        weight: parcelWeight,
+        truckId: id,
+      });
+
     // truck data
     const truckData = {
       id: id,
-      parcels: parcels,
-      weight: formatWeight(sumParcelWeight(parcels)),
+      weight: formatWeight({ quantity: sumParcelWeight(parcels) }),
+      parcelCount: parcels.length,
     };
+
+    if (parcels && parcels.length > 0) {
+      // save the parcels
+      await dbQuery.insertManyParcels(parcels).catch((err) => {
+        console.error('Error in saving parcels in DB');
+        throw new Error(err.message);
+      });
+    }
 
     // save the truck
     await createTruck(truckData).catch((err) => {
@@ -54,7 +66,9 @@ const endpoint = async (request, response) => {
     response.status(200).json(truckData);
   } catch (error) {
     console.error('Error in new creating truck: ' + error.message);
-    response.status(500).send('Unable to create new truck due to server error!');
+    response
+      .status(500)
+      .send('Unable to create new truck due to server error!');
   }
 };
 

@@ -8,6 +8,7 @@ describe('Create truck controller tests', () => {
   afterEach(() => {
     // to reset the DB query after each test
     dbQuery.createTruck.mockClear();
+    dbQuery.insertManyParcels.mockClear();
   });
 
   it('should return 400 when uuid is invalid', async () => {
@@ -21,13 +22,14 @@ describe('Create truck controller tests', () => {
     const uuid = uuidv4();
     const newTruck = {
       id: uuid,
-      parcels: [],
-      weight: { quantity: 0, unit: 'kg' },
+      parcelCount: 10,
+      weight: { quantity: 50, unit: 'kg' },
     };
     dbQuery.createTruck.mockReturnValue(Promise.resolve(true));
+    dbQuery.insertManyParcels.mockReturnValue(Promise.resolve(true));
     const response = await request
       .post('/createTruck')
-      .send({ truckId: uuid, parcelList: [] });
+      .send({ truckId: uuid, parcelWeight: 5});
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(newTruck);
   });

@@ -30,6 +30,10 @@ const endpoint = async (request, response) => {
       throw new Error(err.message);
     });
 
+    // return 404 if no truck is found
+    if (!truck)
+      return response.status(404).send('No truck found associated with the truck id');
+
     // return the truck details
     response.status(200).json(truck);
   } catch (error) {

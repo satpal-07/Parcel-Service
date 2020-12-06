@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { generateParcels, sumParcelWeight, formatWeight } = require('./utils');
-const { updateTruckById } = require('../db-handler/db-query');
+const { updateTruckById, findTruckById, insertManyParcels } = require('../db-handler/db-query');
 
 /**
  * Endpoint name
@@ -25,26 +25,13 @@ const endpointSchema = Joi.object({
 const endpoint = async (request, response) => {
   try {
     // get body params
-    const query = request.body.truckId;
+    const id = request.body.truckId;
     const parcelCount = request.body.parcelCount;
     const parcelWeight = request.body.parcelWeight;
 
-    // generate parcels - if parcel count is undefined then default value will be used. if parcel weight is undefined then random weight will be used for each parcel
-    const parcels = generateParcels({
-      count: parcelCount,
-      weight: parcelWeight,
-    });
-
-    // add the parcel and calculated weight
-    const update = {
-      parcels,
-      // sum the parcel weight to get the total weight of the truck
-      weight: formatWeight(sumParcelWeight(parcels)),
-    };
-
-    // update the truck
-    const truck = await updateTruckById(query, update).catch((err) => {
-      console.error('Error in updating truck in the DB');
+    // get the truck
+    const truck = await findTruckById(id).catch((err) => {
+      console.error('Error in getting truck from the DB');
       throw new Error(err.message);
     });
 
@@ -52,8 +39,34 @@ const endpoint = async (request, response) => {
     if (!truck)
       return response.status(404).send('No truck found associated with the truck id');
 
+    // generate parcels - if parcel count is undefined then default value will be used. if parcel weight is undefined then random weight will be used for each parcel
+    const parcels = generateParcels({
+      count: parcelCount,
+      weight: parcelWeight,
+      truckId: id,
+    });
+
+    // save the parcels
+    await insertManyParcels(parcels).catch((err) => {
+      console.error('Error in saving parcels in DB');
+      throw new Error(err.message);
+    });
+
+    // add the parcel and calculated weight
+    const update = {
+      parcelCount: parcels.length + truck.parcelCount,
+      // sum the parcel weight to get the total weight of the truck
+      weight: formatWeight({quantity: sumParcelWeight(parcels), currentWeight: truck.weight}),
+    };
+
+    // update the truck
+    const updatedTruck = await updateTruckById(id, update).catch((err) => {
+      console.error('Error in updating truck in the DB');
+      throw new Error(err.message);
+    });
+
     // return the updated truck details
-    response.status(200).json(truck);
+    response.status(200).json(updatedTruck);
   } catch (error) {
     console.error('Error in loading the truck: ' + error.message);
     response.status(500).send('Unable to load the truck due to server error!');
