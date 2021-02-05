@@ -3,3 +3,5 @@ src/node_modules/
 src/coverage/
 .DS_STORE
 Requirement.txt
+src/npm-debug.log
+src/.env
